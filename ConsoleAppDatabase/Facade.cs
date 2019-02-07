@@ -50,6 +50,12 @@ namespace ConsoleAppDatabase
         } 
         public static Exam GetSpecifikExam(Int examId)
         {
+            //make connection to database
+            //create sql statement to select the specific exam for the database
+            //create Exam variable that will be returned
+            //create an Exam object to carry the table result
+
+
 
         }
     }
