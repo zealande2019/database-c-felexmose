@@ -48,6 +48,9 @@ namespace ConsoleAppDatabase
             }
             return result;
         } 
+        public static Exam GetSpecifikExam(Int examId)
+        {
 
+        }
     }
 }
