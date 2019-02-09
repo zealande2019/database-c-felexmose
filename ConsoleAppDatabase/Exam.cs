@@ -11,6 +11,10 @@ namespace ConsoleAppDatabase
         public int grade;
         public int studentId;
 
+        public Exam()
+        {
+        }
+
         public Exam(int examId, string examName, int grade, int studentId)
         {
             this.examId = examId;
