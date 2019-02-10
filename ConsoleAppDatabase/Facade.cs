@@ -20,7 +20,7 @@ namespace ConsoleAppDatabase
                 builder.UserID = "fele0009";
                 builder.Password = "Zealand1234";
                 builder.InitialCatalog = "student";
-
+                
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
                     Console.WriteLine("\nQuery data GetAllStudents:");
@@ -29,7 +29,7 @@ namespace ConsoleAppDatabase
                     connection.Open();
                     StringBuilder sb = new StringBuilder();
                     sb.Append("SELECT* ");
-                    sb.Append("FROM student");
+                    sb.Append("FROM student ;");
                     //sb.Append("JOIN [SalesLT].[Product] p ");
                     //sb.Append("ON pc.productcategoryid = p.productcategoryid;");
                     String sql = sb.ToString();
@@ -40,12 +40,15 @@ namespace ConsoleAppDatabase
                         {
                             while (reader.Read())
                             {
+                                // saving data from the database to respective variables.
                                 int id = reader.GetInt32(0);
                                 string name = reader.GetString(1);
                                 string mobilNr = reader.GetString(2);
 
+                                // creation of a student object to carry the data from the student table.
                                 Student student = new Student(id, name, mobilNr);
 
+                                // add each student object to the list of student variable.
                                 result.Add(student);
 
 
@@ -68,7 +71,7 @@ namespace ConsoleAppDatabase
         {
             //a helper variable for return purpose
             Exam result = new Exam();
-
+            
             try
             {
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
@@ -86,13 +89,16 @@ namespace ConsoleAppDatabase
                     StringBuilder sb = new StringBuilder();
                     sb.Append("SELECT* ");
                     sb.Append("FROM exam");
-                    sb.Append("WHERE exam.ExamId = @examId ");
+                    sb.Append("WHERE exam.ExamId = @examId ;");
                     //sb.Append("ON pc.productcategoryid = p.productcategoryid;");
-                    String sql = sb.ToString();
+                    String sqlQuery = sb.ToString();
 
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    using (SqlCommand selectCommand = new SqlCommand(sqlQuery, connection))
                     {
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        //replacing the @examId with the actual user given parameter value.
+                        selectCommand.Parameters.AddWithValue("@examId", examId);
+
+                        using (SqlDataReader reader = selectCommand.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -117,6 +123,49 @@ namespace ConsoleAppDatabase
             }
             //Console.ReadLine();
             return result;                             
+        }
+
+        public static void DeleteExam(int examId)
+        {
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = "zealand2019.database.windows.net";
+                builder.UserID = "fele0009";
+                builder.Password = "Zealand1234";
+                builder.InitialCatalog = "student";
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    Console.WriteLine("\nQuery data DeleteSpecifikData:");
+                    Console.WriteLine("=========================================\n");
+
+                    connection.Open();
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("DELETE FROM exam");
+                    sb.Append("WHERE ExamID = @examId ;");
+                    //sb.Append(" ");
+                    //sb.Append("ON pc.productcategoryid = p.productcategoryid;");
+                    String sqlQuery = sb.ToString();
+
+                    using (SqlCommand deleteCommand = new SqlCommand(sqlQuery, connection))
+                    {
+
+                        deleteCommand.Parameters.AddWithValue("@examId",examId);
+                        Console.WriteLine("Data deleted.");
+
+                        //using (SqlDataReader reader = command.ExecuteReader())
+                        //{
+                        //    Console.WriteLine("Data deleted.");
+                        //}
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
         }
     }
 }
