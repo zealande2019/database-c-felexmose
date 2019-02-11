@@ -9,6 +9,7 @@ namespace ConsoleAppDatabase
         public int id;
         public string name;
         public string mobilNr;
+        
 
         public Student(int id, string name, string mobilNr)
         {
