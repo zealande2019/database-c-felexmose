@@ -18,12 +18,15 @@ namespace ConsoleAppDatabase
             }
 
             //creation of a variable to contain exam nr.12.
-            Exam Exam12 = Facade.GetSpecifikExam(20);
+            Exam Exam12 = Facade.GetSpecifikExam(10);
             //print exam12 details.
             Console.WriteLine($"ExamID:{Exam12.examId} Exam Name:{Exam12.examName} Grade:{Exam12.grade} Student ID:{Exam12.studentId} ");
 
             //delete exam nr.24.
             Facade.DeleteExam(24);
+
+            // select all students, with respective attributes from the student table and exam table from database
+            Facade.SelectAllStudents();
            
             Console.ReadKey();
         }

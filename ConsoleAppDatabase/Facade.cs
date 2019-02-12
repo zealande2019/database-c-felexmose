@@ -169,53 +169,45 @@ namespace ConsoleAppDatabase
 
         }
 
-        public static List<Student> SelectAllStudents()
+        // opgave 1.1 selecting all students, with respective attributes from the student table and exam table from database
+        public static void SelectAllStudents()
         {
-                //A return variable result that will contain the requested data from the database
-                List<Student> result = new List<Student>();
+            //A return variable result that will contain the requested data from the database
+            List<Student> result = new List<Student>();
 
-                string sqlStoredProcedure = "selectAllStudents";
-                
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                builder.DataSource = "zealand2019.database.windows.net";
-                builder.UserID = "fele0009";
-                builder.Password = "Zealand1234";
-                builder.InitialCatalog = "student";
+            string sqlStoredProcedure = "selectAllStudents";
 
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "zealand2019.database.windows.net";
+            builder.UserID = "fele0009";
+            builder.Password = "Zealand1234";
+            builder.InitialCatalog = "student";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                Console.WriteLine("\nQuery data GetAllStudents:");
+                Console.WriteLine("=========================================\n");
+
+                connection.Open();
+
+                using (var storedProcedureCommand = new SqlCommand(sqlStoredProcedure, connection))
                 {
-                    Console.WriteLine("\nQuery data GetAllStudents:");
-                    Console.WriteLine("=========================================\n");
-
-                    connection.Open();
-                
-                    using (var storedProcedureCommand = new SqlCommand(sqlStoredProcedure, connection))
-                    {
                     storedProcedureCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                        using (SqlDataReader reader = StoredProcedureCommand.ExecuteReader())
+                    using (SqlDataReader reader = storedProcedureCommand.ExecuteReader())
+                    {
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                // saving data from the database to respective variables.
-                                int id = reader.GetInt32(0);
-                                string name = reader.GetString(1);
-                                string mobilNr = reader.GetString(2);
+                            // saving data from the database to respective variables.
+                            int studentId = reader.GetInt32(0);
+                            string name = reader.GetString(1);
+                            int grade = reader.GetInt32(2);
+                            string examName = reader.GetString(3);                                                 
 
-                                // creation of a student object to carry the data from the student table.
-                                Student student = new Student(id, name, mobilNr);
-
-                                // add each student object to the list of student variable.
-                                result.Add(student);
-
-
-                                //Console.WriteLine("{0} {1} {2}", reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
-                            }
+                            Console.WriteLine("{0} {1} {2} {3}", studentId, name, grade, examName);
                         }
                     }
                 }
-            
-            return result;
-
+            }      
         }
     }
 }
