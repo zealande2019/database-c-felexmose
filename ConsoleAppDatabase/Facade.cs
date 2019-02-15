@@ -173,7 +173,7 @@ namespace ConsoleAppDatabase
         public static void SelectAllStudents()
         {
             //A return variable result that will contain the requested data from the database
-            List<Student> result = new List<Student>();
+            //List<Student> result = new List<Student>();
 
             string sqlStoredProcedure = "selectAllStudents";
 
@@ -185,7 +185,7 @@ namespace ConsoleAppDatabase
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                Console.WriteLine("\nQuery data GetAllStudents:");
+                Console.WriteLine("\nQuery data SelectAllStudents:");
                 Console.WriteLine("=========================================\n");
 
                 connection.Open();
@@ -209,5 +209,44 @@ namespace ConsoleAppDatabase
                 }
             }      
         }
+        public static void SelectSpecifikStudent(int studentId)
+        {
+            string sqlStoredProcedure = "selectSpecifikStudent @studentId";
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "zealand2019.database.windows.net";
+            builder.UserID = "fele0009";
+            builder.Password = "Zealand1234";
+            builder.InitialCatalog = "student";
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                Console.WriteLine("\nQuery data SelectSpecifikStudent:");
+                Console.WriteLine("=========================================\n");
+
+                connection.Open();
+
+                using (var storedProcedureCommand = new SqlCommand(sqlStoredProcedure, connection))
+                {
+                    // replacing the @studentId in the query with the actual user given parameter
+                    storedProcedureCommand.Parameters.AddWithValue("@studentId", studentId);
+                    storedProcedureCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    using (SqlDataReader reader = storedProcedureCommand.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // saving data from the database to respective variables.
+                            int studentId1 = reader.GetInt32(0);
+                            string name = reader.GetString(1);
+                            int grade = reader.GetInt32(2);
+                            string examName = reader.GetString(3);
+
+                            Console.WriteLine("{0} {1} {2} {3}", studentId, name, grade, examName);
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

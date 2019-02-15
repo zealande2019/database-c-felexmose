@@ -27,6 +27,8 @@ namespace ConsoleAppDatabase
 
             // select all students, with respective attributes from the student table and exam table from database
             Facade.SelectAllStudents();
+
+            Facade.SelectSpecifikStudent(220);
            
             Console.ReadKey();
         }
